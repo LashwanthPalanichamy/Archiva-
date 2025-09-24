@@ -9,21 +9,21 @@ const multer = require('multer');
 
 // --- 2. Create Express App ---
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3001; // FIX 1: Render oda Port ah use panrom
 
 // --- 3. Middleware Setup ---
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); 
 
 // --- 4. PostgreSQL Database Connection Pool ---
 const connectionString = 'postgresql://neondb_owner:npg_WF3C0tNMDfAX@ep-flat-tree-adx0kbkd-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require';
 
 const pool = new Pool({
     connectionString: connectionString,
-    ssl: {
-        rejectUnauthorized: false // Important for Render to Neon connection
+    ssl: { // FIX 2: Secure connection sari panna indha code mukkiyam
+        rejectUnauthorized: false
     }
 });
 
@@ -39,17 +39,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-// <<< PUTHUSA ADD PANNA CODE >>>
-// Serve Login.html as the main page for the root URL (/)
+// FIX 3: Muthal page ah Login.html nu set panrom
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Login.html'));
 });
-// <<< ADD PANNADHU MUDINJADHU >>>
 
 
 // =================================================================
 // === AUTHENTICATION & PROFILE APIs ===============================
-// (No changes needed in the APIs below this point)
+// (Unga matha API code ellam inga apdiye irukum)
 // =================================================================
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -78,13 +76,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ... (unga matha API code ellam inga apdiye irukum) ...
-
-// Example of another API route (no changes needed)
-app.get('/api/profile', async (req, res) => {
-    const { email } = req.query;
-    // ... your existing code for this route ...
-});
+// ... (unga project oda balance ella API code um inga apdiye irukum)
 
 
 // --- Start Server --- 
