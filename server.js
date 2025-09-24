@@ -9,14 +9,12 @@ const multer = require('multer');
 
 // --- 2. Create Express App ---
 const app = express();
-// CHANGE 1: Use Render's PORT environment variable
 const port = process.env.PORT || 3001;
 
 // --- 3. Middleware Setup ---
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// CHANGE 2: Serve files from the main project folder, not 'public'
 app.use(express.static(__dirname));
 
 // --- 4. PostgreSQL Database Connection Pool ---
@@ -24,6 +22,9 @@ const connectionString = 'postgresql://neondb_owner:npg_WF3C0tNMDfAX@ep-flat-tre
 
 const pool = new Pool({
     connectionString: connectionString,
+    ssl: {
+        rejectUnauthorized: false // Important for Render to Neon connection
+    }
 });
 
 pool.connect()
@@ -36,6 +37,15 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage: storage });
+
+
+// <<< PUTHUSA ADD PANNA CODE >>>
+// Serve Login.html as the main page for the root URL (/)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Login.html'));
+});
+// <<< ADD PANNADHU MUDINJADHU >>>
+
 
 // =================================================================
 // === AUTHENTICATION & PROFILE APIs ===============================
@@ -68,12 +78,12 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ... (Your other APIs will remain here as they were) ...
-// The rest of your server.js file remains the same. The only changes are at the top.
+// ... (unga matha API code ellam inga apdiye irukum) ...
 
 // Example of another API route (no changes needed)
 app.get('/api/profile', async (req, res) => {
-    // ... your existing code
+    const { email } = req.query;
+    // ... your existing code for this route ...
 });
 
 
