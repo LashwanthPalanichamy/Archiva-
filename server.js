@@ -14,15 +14,16 @@ const port = process.env.PORT || 3001; // FIX 1: Render oda Port ah use panrom
 // --- 3. Middleware Setup ---
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(__dirname)); 
+app.use(express.static(__dirname)); // FIX 2: Correct file path
 
 // --- 4. PostgreSQL Database Connection Pool ---
 const connectionString = 'postgresql://neondb_owner:npg_WF3C0tNMDfAX@ep-flat-tree-adx0kbkd-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require';
 
 const pool = new Pool({
     connectionString: connectionString,
-    ssl: { // FIX 2: Secure connection sari panna indha code mukkiyam
+    ssl: { // FIX 3: (MUKIYAMANA FIX) Secure connection sari panna indha code
         rejectUnauthorized: false
     }
 });
@@ -39,7 +40,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-// FIX 3: Muthal page ah Login.html nu set panrom
+// FIX 4: Muthal page ah Login.html nu set panrom
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Login.html'));
 });
@@ -76,7 +77,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// ... (unga project oda balance ella API code um inga apdiye irukum)
+// ... (unga project oda balance ella API code um inga apdiye continue aagum) ...
 
 
 // --- Start Server --- 
