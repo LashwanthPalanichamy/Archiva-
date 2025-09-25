@@ -1,6 +1,6 @@
 // --- 1. Dependencies ---
 const express = require('express');
-const { Pool } = require('pg');
+const { Pool } = require('pg'); // PG library-oda pool-ae sariya work aagum
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -9,26 +9,27 @@ const multer = require('multer');
 
 // --- 2. Create Express App ---
 const app = express();
-const port = process.env.PORT || 3001; // FIX 1: Render oda Port ah use panrom
+const port = process.env.PORT || 3001;
 
 // --- 3. Middleware Setup ---
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static(__dirname)); // FIX 2: Correct file path
+app.use(express.static(__dirname));
 
 // --- 4. PostgreSQL Database Connection Pool ---
 const connectionString = 'postgresql://neondb_owner:npg_WF3C0tNMDfAX@ep-flat-tree-adx0kbkd-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require';
 
 const pool = new Pool({
     connectionString: connectionString,
-    ssl: { // FIX 3: (MUKIYAMANA FIX) Secure connection sari panna indha code
+    ssl: {
         rejectUnauthorized: false
     }
 });
 
-pool.connect()
+// FIX 5: Ippo un connection-a pool-la irundhu test pandrom
+pool.query('SELECT NOW()')
     .then(() => console.log(`\n\n[DATABASE] Connected successfully to Neon PostgreSQL database!\n`))
     .catch(err => console.error('CRITICAL DATABASE CONNECTION ERROR:', err.stack));
 
@@ -80,7 +81,7 @@ app.post('/login', async (req, res) => {
 // ... (unga project oda balance ella API code um inga apdiye continue aagum) ...
 
 
-// --- Start Server --- 
+// --- Start Server ---
 app.listen(port, () => {
     console.log(`✅ Campus Connect backend server is running on port: ${port}`);
 });
