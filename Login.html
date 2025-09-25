@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8f8f9; /* Namma Dark Blue background */
+            background: #f8f8f9;
             overflow-x: hidden;
         }
         
@@ -195,7 +195,8 @@
             errorMessage.classList.add('hidden');
 
             try {
-                const response = await fetch('http://localhost:3001/login', {
+                // FIX: Idha un Render URL-kku maathiruken
+                const response = await fetch('https://archiva-ymb4.onrender.com/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
