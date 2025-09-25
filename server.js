@@ -1,6 +1,6 @@
 // --- 1. Dependencies ---
 const express = require('express');
-const { Pool } = require('pg'); // PG library-oda pool-ae sariya work aagum
+const { Pool } = require('pg'); 
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -28,7 +28,7 @@ const pool = new Pool({
     }
 });
 
-// FIX 5: Ippo un connection-a pool-la irundhu test pandrom
+// FIX: Ippo un connection-a pool-la irundhu test pandrom
 pool.query('SELECT NOW()')
     .then(() => console.log(`\n\n[DATABASE] Connected successfully to Neon PostgreSQL database!\n`))
     .catch(err => console.error('CRITICAL DATABASE CONNECTION ERROR:', err.stack));
@@ -41,7 +41,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-// FIX 4: Muthal page ah Login.html nu set panrom
+// FIX: Muthal page ah Login.html nu set panrom
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Login.html'));
 });
@@ -73,7 +73,7 @@ app.post('/login', async (req, res) => {
             user: { id: user.staff_id, name: user.name, email: user.email, role: user.role, department: user.department, profile_picture_url: user.profile_picture_url }
         });
     } catch (err) {
-        console.error("❌ CRITICAL LOGIN ERROR:", err);
+        console.error("❌ CRITICAL LOGIN ERROR:", err.message);
         res.status(500).json({ success: false, message: 'An internal server error occurred.' });
     }
 });
@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
 // ... (unga project oda balance ella API code um inga apdiye continue aagum) ...
 
 
-// --- Start Server ---
+// --- Start Server --- 
 app.listen(port, () => {
     console.log(`✅ Campus Connect backend server is running on port: ${port}`);
 });
