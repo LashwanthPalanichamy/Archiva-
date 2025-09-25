@@ -1,6 +1,6 @@
 // --- 1. Dependencies ---
 const express = require('express');
-const { Pool } = require('pg'); 
+const { Pool } = require('pg');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -21,14 +21,16 @@ app.use(express.static(__dirname));
 // --- 4. PostgreSQL Database Connection Pool ---
 const connectionString = 'postgresql://neondb_owner:npg_WF3C0tNMDfAX@ep-flat-tree-adx0kbkd-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require';
 
+// FIX: Connection pooling-a sariya handle pandrom.
 const pool = new Pool({
     connectionString: connectionString,
     ssl: {
         rejectUnauthorized: false
-    }
+    },
+    max: 20, // Konjam connections-a maintain pannum
+    idleTimeoutMillis: 30000, // Konja neram free-a irundha, connection-a close pannum (30 seconds)
 });
 
-// FIX: Ippo un connection-a pool-la irundhu test pandrom
 pool.query('SELECT NOW()')
     .then(() => console.log(`\n\n[DATABASE] Connected successfully to Neon PostgreSQL database!\n`))
     .catch(err => console.error('CRITICAL DATABASE CONNECTION ERROR:', err.stack));
@@ -73,6 +75,7 @@ app.post('/login', async (req, res) => {
             user: { id: user.staff_id, name: user.name, email: user.email, role: user.role, department: user.department, profile_picture_url: user.profile_picture_url }
         });
     } catch (err) {
+        // Enna maathinen-na, .message add panniruken
         console.error("❌ CRITICAL LOGIN ERROR:", err.message);
         res.status(500).json({ success: false, message: 'An internal server error occurred.' });
     }
@@ -81,7 +84,7 @@ app.post('/login', async (req, res) => {
 // ... (unga project oda balance ella API code um inga apdiye continue aagum) ...
 
 
-// --- Start Server --- 
+// --- Start Server ---
 app.listen(port, () => {
     console.log(`✅ Campus Connect backend server is running on port: ${port}`);
 });
